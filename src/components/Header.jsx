@@ -5,9 +5,11 @@ import {
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 function Header() {
-  const {data:session,status} = useSession();
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   return (
     <header>
@@ -16,6 +18,7 @@ function Header() {
         {/* Logo */}
         <div className="mt-2 flex item-center grow sm:grow-0">
           <Image
+            onClick={() => router.push("/")}
             src="https://pngimg.com/uploads/amazon/amazon_PNG11.png"
             width={150}
             height={40}
@@ -46,7 +49,10 @@ function Header() {
             <p className="font-extrabold md:text-sm">& Orders</p>
           </div>
 
-          <div className="relative link flex items-center space-x-0.5">
+          <div
+            onClick={() => router.push("/checkout")}
+            className="relative link flex items-center space-x-0.5"
+          >
             <span className="absolute top-0 -right-2 md:right-10 h-4 w-4 bg-yellow-400 text-center rounded-lg text-black font-bold">
               0
             </span>
