@@ -29,7 +29,7 @@ export default function Product({
         src={image}
         height={200}
         width={200}
-        className="object-contain "
+        className="object-contain"
         alt={""}
       />
 
