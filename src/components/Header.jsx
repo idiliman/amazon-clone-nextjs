@@ -6,10 +6,15 @@ import {
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { selectItems } from "../slices/basketSlice";
 
 function Header() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const items = useSelector(selectItems);
+
+  console.log(items);
 
   return (
     <header>
@@ -54,7 +59,7 @@ function Header() {
             className="relative link flex items-center space-x-0.5"
           >
             <span className="absolute top-0 -right-2 md:right-10 h-4 w-4 bg-yellow-400 text-center rounded-lg text-black font-bold">
-              0
+              {items.length}
             </span>
             <ShoppingCartIcon className="h-10" />
             <p className="hidden md:block font-extrabold md:text-sm mt-2">
