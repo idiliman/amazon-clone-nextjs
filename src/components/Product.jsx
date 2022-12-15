@@ -21,7 +21,7 @@ export default function Product({
   const [rating] = useState(
     Math.floor(Math.random() * (MAX_RATING - MIN_RATING + 1)) + MIN_RATING
   );
-  const [hasprime] = useState(Math.random() < 0.5);
+  const [hasPrime] = useState(Math.random() < 0.5);
 
   const addItemToBasket = () => {
     const product = {
@@ -31,6 +31,7 @@ export default function Product({
       description,
       category,
       image,
+      hasPrime
     };
 
     // Send product object as an action to REDUX store... basket slice
@@ -70,7 +71,7 @@ export default function Product({
         <Currency quantity={price} currency="MYR" />
       </div>
 
-      {hasprime && (
+      {hasPrime && (
         <div className="flex items-center space-x-2 -mt-5">
           <img
             className="w-12"
