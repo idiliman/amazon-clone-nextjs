@@ -6,11 +6,14 @@ import Header from "../src/components/Header";
 import { selectItems,selectTotal } from "../src/slices/basketSlice";
 import Currency from "react-currency-formatter";
 import { useSession } from "next-auth/react";
+import { groupBy } from "lodash";
 
 function Checkout() {
   const items = useSelector(selectItems);
   const total = useSelector(selectTotal);
   const { data: session, status } = useSession();
+  const groupedItems = Object.values(groupBy(items, "id"));
+  console.log(groupedItems)
 
   return (
     <div className="bg-gray-100">
@@ -18,7 +21,7 @@ function Checkout() {
 
       <main className="lg:flex max-w-screen-xl mx-auto">
         {/* Left  */}
-        <div className="grow m-5 shadow-sm">
+        <div className=" m-5 shadow-sm">
           <Image
             src="https://www.junglescout.com/wp-content/uploads/2020/05/Prime-day-banner.png"
             height={200}
@@ -30,19 +33,22 @@ function Checkout() {
               {items.length === 0 ? "Basket is empty" : "Shopping Basket"}
             </h1>
 
-            {items.map((item, i) => (
+            {groupedItems.map((item, i) => (
               <CheckoutProduct
+              //TODO: Maybe need to change the key props
                 key={i}
-                id={item.id}
-                title={item.title}
-                price={item.price}
-                rating={item.rating}
-                description={item.description}
-                category={item.category}
-                image={item.image}
-                hasPrime={item.hasPrime}
+                id={item[0].id}
+                title={item[0].title}
+                price={item[0].price}
+                rating={item[0].rating}
+                description={item[0].description}
+                category={item[0].category}
+                image={item[0].image}
+                hasPrime={item[0].hasPrime}
+                quantity={item.length}
               />
             ))}
+            
           </div>
         </div>
 
@@ -52,7 +58,7 @@ function Checkout() {
             <>
               <h2 className="whitespace-nowrap">
                 Subtotal ({items.length} items):
-                <span className="ml-1 font-bold">
+                <span className="font-bold">
                   <Currency quantity={total} currency="MYR" />
                 </span>
               </h2>
@@ -69,7 +75,12 @@ function Checkout() {
             </>
           )}
         </div>
+
+        
       </main>
+      <div className="h-44 bg-red-500 ">
+      <h1>test</h1>
+      </div>
     </div>
   );
 }

@@ -38,8 +38,6 @@ export default function Product({
     dispatch(addToBasket(product));
   };
 
-  console.log("BasketItem", addToBasket);
-
   return (
     <div className="relative flex flex-col items-center m-5 bg-white z-30 p-10">
       <p className="absolute top-2 right-2 text-xs italic text-gray-400">

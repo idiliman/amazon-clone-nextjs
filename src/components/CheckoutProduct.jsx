@@ -6,7 +6,11 @@ import {
 } from "@heroicons/react/24/solid";
 import Currency from "react-currency-formatter";
 import { useDispatch, useSelector } from "react-redux";
-import { addToBasket, removeFromBasket,selectItems } from "../slices/basketSlice";
+import {
+  addToBasket,
+  removeFromBasket,
+  selectItems,
+} from "../slices/basketSlice";
 
 function CheckoutProduct(props) {
   const dispatch = useDispatch();
@@ -22,6 +26,8 @@ function CheckoutProduct(props) {
   const hasPrime = props.hasPrime;
   const quantity = props.quantity;
 
+  const total = price * quantity;
+
   const addItemToBasket = () => {
     const product = {
       id,
@@ -33,7 +39,6 @@ function CheckoutProduct(props) {
       image,
       hasPrime,
     };
-
     dispatch(addToBasket(product));
   };
 
@@ -57,7 +62,7 @@ function CheckoutProduct(props) {
         </div>
 
         <p className="text-xs my-2 line-clamp-3">{description}</p>
-        <Currency quantity={price} currency="MYR" />
+        <Currency quantity={total} currency="MYR" />
 
         {hasPrime && (
           <div className="flex items-center space-x-2">
@@ -72,31 +77,20 @@ function CheckoutProduct(props) {
       </div>
 
       {/* Right add/remove buttons */}
-      <div className="flex flex-col space-y-2 my-auto justify-self-end">
-        <div className="flex justify-between xs:justify-start">
+      <div className="flex flex-col space-y-2 my-auto justify-self-center">
+        <div className="flex flex-col md:flex-row justify-between xs:justify-start">
           <button className="button sm:p-1" onClick={removeItemFromBasket}>
             <MinusSmallIcon className="h-5 text-black" />
           </button>
 
           <div className="p-2 whitespace-normal sm:p-1 sm:whitespace-nowrap">
-            Quantity: <span className="font-bold">{items.length}</span>
+            Quantity: <span className="font-bold text-sm md:text-lg">{quantity}</span>
           </div>
 
           <button className="button sm:p-1" onClick={addItemToBasket}>
             <PlusSmallIcon className="h-5 text-black" />
           </button>
         </div>
-
-        {/* <button className="button" onClick={removeGroupFromBasket}>
-          Remove from Basket
-        </button> */}
-
-        {/* <button onClick={addItemToBasket} className="button mt-auto">
-          Add to Basket
-        </button>
-        <button onClick={removeItemFromBasket} className="button mt-auto">
-          Remove from Basket
-        </button> */}
       </div>
     </div>
   );
