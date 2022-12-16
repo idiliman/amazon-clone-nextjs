@@ -1,11 +1,16 @@
 import Image from "next/image";
-import { StarIcon } from "@heroicons/react/24/solid";
+import {
+  StarIcon,
+  MinusSmallIcon,
+  PlusSmallIcon,
+} from "@heroicons/react/24/solid";
 import Currency from "react-currency-formatter";
-import { useDispatch } from "react-redux";
-import { addToBasket, removeFromBasket } from "../slices/basketSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addToBasket, removeFromBasket,selectItems } from "../slices/basketSlice";
 
 function CheckoutProduct(props) {
   const dispatch = useDispatch();
+  const items = useSelector(selectItems);
 
   const id = props.id;
   const title = props.title;
@@ -65,14 +70,33 @@ function CheckoutProduct(props) {
           </div>
         )}
       </div>
+
       {/* Right add/remove buttons */}
       <div className="flex flex-col space-y-2 my-auto justify-self-end">
-        <button onClick={addItemToBasket} className="button mt-auto">
+        <div className="flex justify-between xs:justify-start">
+          <button className="button sm:p-1" onClick={removeItemFromBasket}>
+            <MinusSmallIcon className="h-5 text-black" />
+          </button>
+
+          <div className="p-2 whitespace-normal sm:p-1 sm:whitespace-nowrap">
+            Quantity: <span className="font-bold">{items.length}</span>
+          </div>
+
+          <button className="button sm:p-1" onClick={addItemToBasket}>
+            <PlusSmallIcon className="h-5 text-black" />
+          </button>
+        </div>
+
+        {/* <button className="button" onClick={removeGroupFromBasket}>
+          Remove from Basket
+        </button> */}
+
+        {/* <button onClick={addItemToBasket} className="button mt-auto">
           Add to Basket
         </button>
         <button onClick={removeItemFromBasket} className="button mt-auto">
           Remove from Basket
-        </button>
+        </button> */}
       </div>
     </div>
   );

@@ -3,12 +3,13 @@ import React from "react";
 import { useSelector } from "react-redux";
 import CheckoutProduct from "../src/components/CheckoutProduct";
 import Header from "../src/components/Header";
-import { selectItems } from "../src/slices/basketSlice";
+import { selectItems,selectTotal } from "../src/slices/basketSlice";
 import Currency from "react-currency-formatter";
 import { useSession } from "next-auth/react";
 
 function Checkout() {
   const items = useSelector(selectItems);
+  const total = useSelector(selectTotal);
   const { data: session, status } = useSession();
 
   return (
@@ -51,8 +52,8 @@ function Checkout() {
             <>
               <h2 className="whitespace-nowrap">
                 Subtotal ({items.length} items):
-                <span className="font-bold">
-                  <Currency currency="MYR" />
+                <span className="ml-1 font-bold">
+                  <Currency quantity={total} currency="MYR" />
                 </span>
               </h2>
 
