@@ -8,7 +8,6 @@ export default async (req, res) => {
   const groupedItems = Object.values(groupBy(items, "id"));
 
   const transformedItems = groupedItems.map((item) => ({
-  
     price_data: {
       currency: "MYR",
       product_data: {

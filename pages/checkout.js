@@ -17,7 +17,7 @@ function Checkout() {
   const { data: session, status } = useSession();
   const groupedItems = Object.values(groupBy(items, "id"));
 
-console.log(groupedItems)
+  console.log(groupedItems);
 
   const createCheckoutSession = async () => {
     const stripe = await stripePromise;
