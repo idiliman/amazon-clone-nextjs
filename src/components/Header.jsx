@@ -6,13 +6,29 @@ import {
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectItems } from "../slices/basketSlice";
+import { setUserEmail } from "../slices/emailSlice";
+import { useEffect } from "react";
 
 function Header() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const items = useSelector(selectItems);
+  const email = useSelector((state) => state.userEmail.email);
+  const dispatch = useDispatch();
+  
+
+  useEffect(() => {
+    let isSession = true;
+    if (isSession) {
+      dispatch(setUserEmail(session?.user.email));
+    }
+
+    return () => {
+      let isSession = false;
+    };
+  }, [session]);
 
   return (
     <header>

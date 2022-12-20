@@ -8,10 +8,10 @@ export default function App({
   pageProps: { session, ...pageProps },
 }) {
   return (
-    <SessionProvider session={session} refetchInterval={5 * 60}>
-      <Provider store={store}>
+    <Provider store={store}>
+      <SessionProvider session={session} refetchInterval={5 * 60}>
         <Component {...pageProps} />
-      </Provider>
-    </SessionProvider>
+      </SessionProvider>
+    </Provider>
   );
 }

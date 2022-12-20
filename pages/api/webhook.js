@@ -1,6 +1,8 @@
 import { buffer } from "micro";
 import serviceAccount from "../../permissions.json";
 import * as admin from "firebase-admin";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase";
 
 // Establish connection to firebase
 const app = !admin.apps.length
@@ -12,14 +14,16 @@ const app = !admin.apps.length
 // Establish connection to stripe
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
+// Webhook
 const endpointSecret = process.env.STRIPE_SIGNING_SECRET;
 
+// Send data to databse
 const fulfillOrder = async (session) => {
   console.log("Fulfilling order", session);
 
   return app
     .firestore()
-    .collection("users")
+    .collection("amazon_users")
     .doc(session.metadata.email)
     .collection("orders")
     .doc(session.id)
@@ -32,6 +36,21 @@ const fulfillOrder = async (session) => {
     .then(() => {
       console.log(`SUCCESS: Order ${session.id} has been added to DB`);
     });
+
+  // const dataRef = db.collection("users");
+  // return await dataRef
+  //   .doc(session.metadata.email)
+  //   // .collection("orders")
+  //   // .doc(session.id)
+  //   // .set({
+  //   //   amount: session.amount_total / 100,
+  //   //   // TODO: Make image link to not duplicate
+  //   //   images: JSON.parse(session.metadata.images),
+  //   //   timestamps: admin.firestore.FieldValue.serverTimestamp(),
+  //   // })
+  //   .then(() => {
+  //     console.log(`SUCCESS: Order ${session.id} has been added to DB`);
+  //   });
 };
 
 export default async (req, res) => {
@@ -50,7 +69,7 @@ export default async (req, res) => {
       return res.status(400).send(`Webhook error: ${error.message}`);
     }
 
-    // Handle checkout.session.completed event
+    // Handle checkout.session.completed event from stripe & Push data to DB
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
 
@@ -58,7 +77,7 @@ export default async (req, res) => {
       return fulfillOrder(session)
         .then(() => res.status(200))
         .catch((error) =>
-          res.status(400).send(`Webhook Error: ${err.message}`)
+          res.status(400).send(`Webhook Error: ${error.message}`)
         );
     }
   }
